@@ -1,7 +1,5 @@
 # Angular-Nodejs
-*****************
-# OnlineShopping
-This project was generated with: Angular CLI: 1.7.3 & Node: 8.10.0
+An Online application using NodeJS and Angular generated with: Angular CLI: 1.7.3 & Node: 8.10.0, made for learning purposes
 *****************
 # How to use
 Run (npm install) for both angular project and node project.
