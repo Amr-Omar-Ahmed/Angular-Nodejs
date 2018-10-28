@@ -1,0 +1,114 @@
+<div id="accordion">
+    <div class="card" *ngFor="let order of Orders | paginate: { itemsPerPage: 3, currentPage: p }">
+        <div class="card-header d-flex justify-content-between align-items-center" id="headingOne">
+            <h5 class="mb-0">
+                <a class="btn btn-link btn-lg text-info" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Show order details
+                </a>
+            </h5>
+            <h5 class="">
+                OrderID:
+                <span class="text-primary">{{order.ID}}</span>
+            </h5>
+            <h5 class="">
+                UserName:
+                <span class="text-primary">{{order.UserName}}</span>
+            </h5>
+            <button class="btn btn-success" type="button" data-toggle="modal" data-target=".bd-example-modal-lg" (click)="requestOrder(order.ID)">Reorder</button>
+        </div>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Product Name</th>
+                                <th class="text-center">Price</th>
+                                <th class="text-center">Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let product of order.products  ; index as i">
+                                <td class="text-center">
+                                    {{product.name}}
+                                </td>
+                                <td class="text-center">
+                                    {{product.price}}
+                                </td>
+                                <td class="text-center">
+                                    <span> {{product.QTY}} </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls>
+    
+</div>
+
+
+<!-- Modal For Reorder -->
+<div id="exampleModalCenter" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="accordion">
+                <div class="card" *ngFor="let ord of selectedOrder">
+                    <div class="card-header d-flex justify-content-between align-items-center" id="headingOne">
+                        <h5 class="mb-0">
+                            <a class="btn btn-link btn-lg text-info" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Order details
+                            </a>
+                        </h5>
+                        <h5 class="">
+                            OrderID:
+                            <span class="text-primary">{{ord.ID}}</span>
+                        </h5>
+                        <h5 class="">
+                            UserName:
+                            <span class="text-primary">{{ord.UserName}}</span>
+                        </h5>
+                        <button class="btn btn-success" type="button" data-toggle="modal" data-target="#exampleModalCenter" (click)="addOrder(ord.ID,ord.UserName)">Confirm Order</button>
+                    </div>
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Product Name</th>
+                                            <th class="text-center">Price</th>
+                                            <th class="text-center">Quantity</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let prod of ord.products ; index as i">
+                                            <td class="text-center">
+                                                {{prod.name}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{prod.price}}
+                                            </td>
+                                            <td class="text-center">
+                                                <span *ngIf="currentIndex!=i"> {{prod.QTY}} </span>
+                                                <input type="text" class="form-control" *ngIf="currentIndex==i" #txt (change)="changeAmount(prod.id,txt.value,ord.ID)" [value]="prod.QTY">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="button" name="change" class="btn btn-danger" (click)="DeleteProduct(prod.id,ord.ID)" value="Delete">
+                                                <input type="button" name="change" class="btn btn-primary" (click)="ChangeQty(i)" value="Change">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

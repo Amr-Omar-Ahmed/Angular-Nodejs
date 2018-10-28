@@ -1,0 +1,54 @@
+<div class="home-wrap">
+  <h1 *ngIf="!submitted">Add New Product</h1>
+  <div class="jumbotron text-xs-center" *ngIf="submitted">
+    <h1 class="display-3">Thank You!</h1>
+    <div class="lead text-center">
+      <strong >Your product has been submitted successfully and it is now available on Souq.com</strong>
+      <div class="row justify-content-center mt-2">
+        <button type="button" class="btn btn-info col-3 mr-2" (click)="AddNewProduct()">Add New Product</button>
+        <button class="primary-btn add-to-cart col-3" routerLink="/products/display-all">Display all Products</button>
+      </div>
+    </div>
+    <hr>
+    <p class="lead">
+    </p>
+  </div>
+  <form (ngSubmit)="submit()" #addProdForm="ngForm" [hidden]="submitted">
+    <fieldset>
+      <!-- Product Name -->
+      <label for="name">Product Name:</label>
+      <input type="text" id="name" name="name" [(ngModel)]="product.name" required #pname="ngModel">
+
+      <!-- Error Message -->
+      <div  *ngIf="pname.invalid && (pname.dirty || pname.touched)" class="alert alert-danger">
+        <div *ngIf="pname.errors?.required">
+          Product Name field can't be blank
+        </div>
+      </div>
+
+      <!-- Product Price -->
+      <label for="price">Product Price:</label>
+      <input min="1" type="number" id="price" name="price" #pprice="ngModel" [(ngModel)]="product.price"
+       required>
+      <div *ngIf="pprice.invalid && (pprice.dirty || pprice.touched)" class="alert alert-danger">
+        <div *ngIf="pprice.errors?.required">
+          price field can't be blank
+        </div>
+      </div>
+
+      <!-- Avaliable quantity -->
+      <label for="quantity">Available Quantity:</label>
+      <input type="number" id="qty" name="quantity" [(ngModel)]="product.amountAvailable" min="1" #qty="ngModel" value="1" required>
+      <div [hidden]="qty.valid || qty.pristine" class="alert alert-danger">Quantity can not be blank</div>
+      
+      <!-- Product image -->
+      <image-upload (removed)="onRemoved($event)" (uploadFinished)="onFileChange($event)" [max]="5" [extensions]="['jpg','png','gif']"
+      [buttonCaption]="'Profile Picture'" [maxFileSize]="1048576" [fileTooLargeMessage]="'Image too large!'" [dropBoxMessage]="'Drop your image here!'"></image-upload>
+      <!-- Product Description -->
+      <label for="description">Product Description:</label>
+      <textarea type="text" id="description" name="description" [(ngModel)]="product.description" #desc="ngModel" required></textarea>
+      <div [hidden]="desc.valid || desc.pristine" class="alert alert-danger">description can not be blank</div>
+    </fieldset>
+    <button  type="submit" [disabled]="!addProdForm.form.valid" value="submit">Add Product</button>
+  </form>
+</div>
